@@ -74,3 +74,31 @@
 
 
 // 字符类型
+// fn main() {
+//     let c = 'z';
+//     let z = 'ℤ';
+//     let heart_eyed_cat = '😻';
+//     println!("c: {c}, z: {z}, heart_eyed_cat: {heart_eyed_cat}")
+// }
+
+// 元组
+// fn main() {
+//     let tup = (500, 6.4, 1);
+//     let (x, y, z) = tup;
+//     println!("x:{x}, y: {y}, z: {z}");
+// }
+
+// fn main() {
+//     let x: (i32, f64, u8) = (500, 6.4, 1);
+//     let five_hundred = x.0;
+//     let six_point_four = x.1;
+//     let one = x.2;
+//     println!("five_hundred: {five_hundred}, six_point_four: {six_point_four}, one: {one}")
+// }
+
+
+// 数组
+fn main() {
+    let a = [1, 2, 3, 4, 5];
+    println!("a:{:?}", a);
+}
