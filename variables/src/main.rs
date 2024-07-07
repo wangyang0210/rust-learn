@@ -98,7 +98,14 @@
 
 
 // 数组
-fn main() {
-    let a = [1, 2, 3, 4, 5];
-    println!("a:{:?}", a);
-}
+// fn main() {
+//     // let a = [1, 2, 3, 4, 5];
+//     let a:[i32;6] = [1, 2, 3, 4, 5, 6];
+//     // let a = [3; 5];
+//     let first = a[0];
+//     let second = a[1];
+//     println!("a:{:?}", a);
+//     println!("first: {first}, second: {second}")
+// }
+
+// 无效的数组访问
