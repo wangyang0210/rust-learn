@@ -16,8 +16,13 @@
 
 
 fn main() {
-    let s = "hello";
-    let _c = s;
-    let b = s;
-    println!("{}", b)
+    // let s = "hello";
+    // let _c = s;
+    // let b = s;
+    // println!("{}", b)
+    let s = String::from("hello world");
+
+    let hello = &s[0..5];
+    let world = &s[6..11];
+    println!("{}, {}", hello, world)
 }
