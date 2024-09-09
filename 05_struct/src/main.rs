@@ -32,4 +32,19 @@ fn main() {
 
     println!("{}", user1.email);
     println!("{}", user1.username);
+
+    // let user2 = User {
+    //     active: user1.active,
+    //     username: user1.username,
+    //     email: String::from("another@example.com"),
+    //     sign_in_count: user1.sign_in_count,
+    // };
+    // println!("{}", user2.email);
+
+    let user2 = User {
+        email: String::from("another@example.com"),
+        ..user1
+    };
+
+    println!("{}", user2.email)
 }
