@@ -63,18 +63,65 @@
 //     println!("{} {} {}", origin.0, origin.1, origin.2);
 // }
 
-struct User {
-    active: bool,
-    username: &str,
-    email: &str,
-    sign_in_count: u64,
+// struct User {
+//     active: bool,
+//     username: &str,
+//     email: &str,
+//     sign_in_count: u64,
+// }
+//
+// fn main() {
+//     let user1 = User {
+//         active: true,
+//         username: "someusername123",
+//         email: "someone@example.com",
+//         sign_in_count: 1,
+//     };
+// }
+
+
+
+// method syntax
+
+#[allow(dead_code)]
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+//
+// impl Rectangle {
+//     fn area(&self) -> u32 {
+//         self.width * self.height
+//     }
+// }
+//
+// fn main() {
+//     let rect1 = Rectangle {
+//         width: 30,
+//         height: 50,
+//     };
+//
+//     println!(
+//         "The area of the rectangle is {} square pixels.",
+//         rect1.area()
+//     );
+// }
+
+impl Rectangle {
+    fn width(&self) -> bool {
+        self.width > 0
+    }
 }
 
 fn main() {
-    let user1 = User {
-        active: true,
-        username: "someusername123",
-        email: "someone@example.com",
-        sign_in_count: 1,
+    let rect1 = Rectangle {
+        width: 30,
+        height: 50,
     };
+
+    if rect1.width() {
+        println!("The rectangle has a nonzero width; it is {}", rect1.width);
+    }
 }
