@@ -243,14 +243,67 @@
 
 
 // match tupe
-fn main() {
-    let dice_roll = 9;
-    match dice_roll {
-        3 => add_fancy_hat(),
-        7 => remove_fancy_hat(),
-        _ => (),
-    }
+// fn main() {
+//     let dice_roll = 9;
+//     match dice_roll {
+//         3 => add_fancy_hat(),
+//         7 => remove_fancy_hat(),
+//         _ => (),
+//     }
+// 
+//     fn add_fancy_hat() {}
+//     fn remove_fancy_hat() {}
+// }
 
-    fn add_fancy_hat() {}
-    fn remove_fancy_hat() {}
+
+// if let
+
+// fn main() {
+//     let config_max = Some(3u8);
+//     match config_max {
+//         Some(max) => println!("The maximum is configured to be {max}"),
+//         _ => (),
+//     }
+// }
+
+// #![allow(unused)]
+// fn main() {
+//     let some_u8_value = Some(0u8);
+//     if let Some(3) = some_u8_value {
+//         println!("three");
+//     }
+// }
+
+#[derive(Debug)]
+enum UsState {
+    Alabama,
+    Alaska,
+    // --snip--
 }
+
+enum Coin {
+    Penny,
+    Nickel,
+    Dime,
+    Quarter(UsState),
+}
+
+// fn main() {
+//     let coin = Coin::Penny;
+//     let mut count = 0;
+//     match coin {
+//         Coin::Quarter(state) => println!("State quarter from {state:?}!"),
+//         _ => count += 1,
+//     }
+// }
+
+fn main() {
+    let coin = Coin::Penny;
+    let mut count = 0;
+    if let Coin::Quarter(state) = coin {
+        println!("State quarter from {state:?}!");
+    } else {
+        count += 1;
+    }
+}
+
