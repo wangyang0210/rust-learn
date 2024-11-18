@@ -250,7 +250,7 @@
 //         7 => remove_fancy_hat(),
 //         _ => (),
 //     }
-// 
+//
 //     fn add_fancy_hat() {}
 //     fn remove_fancy_hat() {}
 // }
@@ -306,4 +306,3 @@ fn main() {
         count += 1;
     }
 }
-
