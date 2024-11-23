@@ -73,7 +73,11 @@
 //     let h = s1[0];
 // }
 
+// fn main() {
+//     let hello = "Здравствуйте";
+//     let answer = &hello[0];
+// }
+
 fn main() {
-    let hello = "Здравствуйте";
-    let answer = &hello[0];
+    
 }
