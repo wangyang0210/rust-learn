@@ -70,3 +70,43 @@ fn main() {
 }
 ```
 
+这个代码将以任意顺序打印每对元素：
+
+```shell
+/Users/wangyang/.cargo/bin/cargo run --color=always --package n08_hashMap --bin n08_hashMap --profile dev
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running `target/debug/n08_hashMap`
+Yellow: 50
+Blue: 10
+
+进程已结束，退出代码为 0
+```
+
+
+
+## HashMap和所有权
+
+对于实现 `Copy` trait 的类型，如 `i32`，值将被复制到哈希映射中。对于像 `String` 这样的拥有所有权的值，值会被移动，哈希映射将成为这些值的所有者，如下所示：
+
+```rust
+fn main() {
+    use std::collections::HashMap;
+
+    let field_name = String::from("Favorite color");
+    let field_value = String::from("Blue");
+
+    let mut map = HashMap::new();
+    map.insert(field_name, field_value);
+    // field_name and field_value are invalid at this point, try using them and
+    // see what compiler error you get!
+}
+```
+
+我们无法使用变量 `field_name` 和 `field_value` 在通过调用 `insert` 将其移动到哈希映射中后。
+
+如果我们向哈希映射中插入对值的引用，这些值不会被移动到哈希映射中。引用所指向的值必须至少在哈希映射有效时同样有效。
+
+
+
+## 更新HashMap
+
