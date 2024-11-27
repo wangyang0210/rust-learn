@@ -110,3 +110,36 @@ fn main() {
 
 ## 更新HashMap
 
+虽然键值对的数量是可增长的，但每个唯一的键一次只能关联一个值（反之则不成立：例如，蓝队和黄队都可能在分数哈希映射中存储值10）。
+
+当你想在一个哈希映射中改变数据时，你必须决定如何处理一个key已经分配了一个值的情况。你可以用新值替换旧值，完全忽略旧值。你可以保留旧值并忽略新值，只有当key还没有值的时候才添加新值。或者你可以将旧值和新值结合起来。让我们看看如何做这些事情！
+
+### 覆盖值
+
+如果我们将一个 key 和一个值插入到`hashMap` 中，然后插入具有不同值的相同 key，则与该 key 关联的值将被替换。即使示例 8-23 中的代码调用了两次 `insert`，哈希映射也只包含一个键值对，因为我们两次都插入了蓝队的键对应的值。
+
+```rust
+fn main() {
+    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Blue"), 25);
+
+    println!("{scores:?}");
+}
+```
+
+运行后，我们将得到以下结果：
+
+```shell
+/Users/wangyang/.cargo/bin/cargo run --color=always --package n08_hashMap --bin n08_hashMap --profile dev
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running `target/debug/n08_hashMap`
+{"Blue": 25}
+```
+
+很明显原始值10被覆盖了。
+
+## key不存在时才插入key和value
