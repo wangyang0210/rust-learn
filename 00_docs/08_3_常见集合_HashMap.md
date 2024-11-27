@@ -14,7 +14,7 @@
 
 
 
-## 创建一个Hash Map
+## 创建HashMap
 
 通过使用 `new` 并使用`insert` 添加元素，来创建一个空的hash map。在下面的示例中，我们跟踪了两支球队的分数，他们的名字是 ***Blue*** 和 ***Yellow***。蓝队以 10 分开始，黄队以 50 分开始。
 
@@ -26,6 +26,28 @@ fn main() {
 
     scores.insert(String::from("Blue"), 10);
     scores.insert(String::from("Yellow"), 50);
+}
+```
+
+请注意，我们首先需要使用标准库中集合部分的 `HashMap`。在我们三种常见的集合中，这个集合是最不常用的，所以它没有包括在预加载范围内自动引入的功能中。`HashMap` 也较少受到标准库的支持；例如，没有内置的宏来构造它们。
+
+就像向量一样，`HashMap`将它们的数据存储在堆上。这个`HashMap`有`String`类型的键和`i32`类型的值。像向量一样，哈希映射是同质的：所有的键必须具有相同的类型，所有的值也必须具有相同的类型。
+
+## 访问HashMap
+
+我们可以通过将哈希映射的`key` 提供给 `get`方法，来从哈希映射中获取一个值，如下所示：
+
+```rust
+fn main() {
+    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+
+    let team_name = String::from("Blue");
+    let score = scores.get(&team_name).copied().unwrap_or(0);
 }
 ```
 
