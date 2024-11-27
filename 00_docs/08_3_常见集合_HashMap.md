@@ -149,5 +149,22 @@ fn main() {
 哈希映射有一个特殊的API，称为`entry`，它将您要检查的键作为参数。`entry`方法的返回值是一个名为`Entry`的枚举，表示可能存在或不存在的值。假设我们想检查黄队的键是否有与之关联的值。如果没有，我们想要插入值50，蓝队也是如此。使用`entry `API，代码如下所示：
 
 ```rust
+fn main() {
+    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+    scores.insert(String::from("Blue"), 10);
+
+    scores.entry(String::from("Yellow")).or_insert(50);
+    scores.entry(String::from("Blue")).or_insert(50);
+
+    println!("{scores:?}");
+}
 ```
+
+`Entry` 上的 `or_insert`方法被定义为：如果相应的` Entry `键存在，则返回该键对应值的可变引用；如果不存在，则将参数插入为该键的新值，并返回新值的可变引用。这种技术比我们自己编写逻辑要清晰得多，而且，此外，它与借用检查器的配合更好。
+
+运行代码将打印 `{"Yellow": 50, "Blue": 10}`。第一次调用 `entry` 将插入值为`50` 的黄队的键，因为黄队还没有值。对`entry` 的第二次调用不会更改哈希映射，因为蓝队已经存在值 `10`。
+
+## 根据旧值更新值
 
