@@ -18,3 +18,14 @@
 
 通过使用 `new` 并使用`insert` 添加元素，来创建一个空的hash map。在下面的示例中，我们跟踪了两支球队的分数，他们的名字是 ***Blue*** 和 ***Yellow***。蓝队以 10 分开始，黄队以 50 分开始。
 
+```rust
+fn main() {
+    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+}
+```
+
