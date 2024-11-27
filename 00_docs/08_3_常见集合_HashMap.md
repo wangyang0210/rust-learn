@@ -51,3 +51,22 @@ fn main() {
 }
 ```
 
+在这里，`score` 将具有与蓝队关联的值，结果将为 `10`。`get` 方法返回 `Option<&V>`; 如果哈希映射中该键没有值，`get` 将返回 `None`。该程序通过调用 `copied` 来处理`Option`，获取 `Option<i32>` 而不是`Option<&i32>`，如果 `scores` 没有键的条目，`unwrap_or`将 `score` 设置为零。
+
+我们可以像使用向量一样，使用for循环以类似的方式遍历哈希映射中的每一个键值对：
+
+```rust
+fn main() {
+    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+
+    for (key, value) in &scores {
+        println!("{key}: {value}");
+    }
+}
+```
+
