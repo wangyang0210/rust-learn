@@ -73,7 +73,31 @@
 //     let h = s1[0];
 // }
 
+// fn main() {
+//     let hello = "Здравствуйте";
+//     let answer = &hello[0];
+// }
+
+// #![allow(unused)]
+// fn main() {
+//     let hello = "Здравствуйте";
+// 
+//     // let s = &hello[0..4];
+//     let s = &hello[0..1];
+//     println!("s:{s}")
+//     
+// }
+
+// #![allow(unused)]
+// fn main() {
+//     for c in "Зд".chars() {
+//         println!("{c}");
+//     }
+// }
+
+#![allow(unused)]
 fn main() {
-    let hello = "Здравствуйте";
-    let answer = &hello[0];
+    for b in "Зд".bytes() {
+        println!("{b}");
+    }
 }

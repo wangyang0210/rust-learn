@@ -242,3 +242,113 @@ let answer = &hello[0];
 Rust提供了不同的方式来解释计算机存储的原始字符串数据，以便每个程序可以选择它需要的解释，无论数据使用哪种人类语言。
 
 Rust 不允许我们索引到 `String` 中来获取字符的最后一个原因是索引操作总是需要恒定的时间（O（1））。但是不能保证使用 `String` 的性能，因为 Rust 必须从头到索引遍历内容以确定有多少有效字符。
+
+
+
+## 字符串切片
+
+索引到字符串通常是一个不好的主意，因为字符串索引操作的返回类型应该是什么并不清楚：字节值、字符、字形簇还是字符串切片。因此，如果你真的需要使用索引来创建字符串切片，Rust会要求你更具体。
+
+与其使用[]和一个数字进行索引，你可以使用[]和一个范围来创建一个包含特定字节的字符串切片：
+
+```rust
+#![allow(unused)]
+fn main() {
+  let hello = "Здравствуйте";
+  let s = &hello[0..4];
+  println!("s:{s}")
+}
+```
+
+这里，s将是一个&str，包含字符串的前四个字节。之前，我们提到过这些字符每一个都是两个字节，这意味着s将是Зд。
+
+如果我们尝试使用类似`&hello[0..1]`的方法来切割一个字符的部分字节，Rust会在运行时像访问向量中的无效索引一样发生错误：
+
+```shell
+/Users/wangyang/.cargo/bin/cargo run --color=always --package n08_string --bin n08_string --profile dev
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running `target/debug/n08_string`
+thread 'main' panicked at src/main.rs:86:19:
+byte index 1 is not a char boundary; it is inside 'З' (bytes 0..2) of `Здравствуйте`
+stack backtrace:
+   0: rust_begin_unwind
+             at /rustc/f6e511eec7342f59a25f7c0534f1dbea00d01b14/library/std/src/panicking.rs:662:5
+   1: core::panicking::panic_fmt
+             at /rustc/f6e511eec7342f59a25f7c0534f1dbea00d01b14/library/core/src/panicking.rs:74:14
+   2: core::str::slice_error_fail_rt
+   3: core::str::slice_error_fail
+             at /rustc/f6e511eec7342f59a25f7c0534f1dbea00d01b14/library/core/src/str/mod.rs:68:5
+   4: core::str::traits::<impl core::slice::index::SliceIndex<str> for core::ops::range::Range<usize>>::index
+             at /rustc/f6e511eec7342f59a25f7c0534f1dbea00d01b14/library/core/src/str/traits.rs:242:21
+   5: core::str::traits::<impl core::ops::index::Index<I> for str>::index
+             at /rustc/f6e511eec7342f59a25f7c0534f1dbea00d01b14/library/core/src/str/traits.rs:60:9
+   6: n08_string::main
+             at ./src/main.rs:86:19
+   7: core::ops::function::FnOnce::call_once
+             at /rustc/f6e511eec7342f59a25f7c0534f1dbea00d01b14/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+进程已结束，退出代码为 101
+```
+
+在通过范围创建字符串切片时，您应该谨慎行事，因为这样做可能会导致程序崩溃。
+
+## 遍历字符串方法
+
+操作字符串片段的最佳方式是明确您是要字符还是字节。对于单个Unicode标量值，请使用`chars`方法。在“Зд”上调用`chars`会分离并返回两个`char`类型的值，您可以迭代结果以访问每个元素：
+
+```rust
+#![allow(unused)]
+fn main() {
+  for c in "Зд".chars() {
+      println!("{c}");
+  }
+}
+```
+
+此内容输出内容如下：
+
+```shell
+/Users/wangyang/.cargo/bin/cargo run --color=always --package n08_string --bin n08_string --profile dev
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running `target/debug/n08_string`
+З
+д
+```
+
+或者，bytes方法返回每个原始字节，这可能适用于您的领域：
+
+```rust
+#![allow(unused)]
+fn main() {
+  for b in "Зд".bytes() {
+      println!("{b}");
+  }
+}
+```
+
+将输出组成这个字符串的四个字节：
+
+```shell
+/Users/wangyang/.cargo/bin/cargo run --color=always --package n08_string --bin n08_string --profile dev
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running `target/debug/n08_string`
+208
+151
+208
+180
+```
+
+但请务必记住，有效的Unicode标量值可能由多个字节组成。
+
+从字符串中获取字形簇，如梵文脚本，是复杂的，所以标准库不提供这种功能。如果你需要这种功能，可以在crates.io上找到相应的库。
+
+
+
+## 字符串并不简单
+
+总而言之，字符串很复杂。不同的编程语言对如何向程序员呈现这种复杂性做出了不同的选择。Rust 选择将正确处理 `String` 数据作为所有 Rust 程序的默认行为，这意味着程序员必须提前花更多的心思来处理 UTF-8 数据。与其他编程语言相比，这种权衡暴露了更多的字符串复杂性，但它可以防止您在开发生命周期的后期处理涉及非 ASCII 字符的错误。
+
+好消息是，标准库提供了许多基于 `String` 和 `&str` 类型构建的功能，以帮助正确处理这些复杂的情况。请务必查看文档以了解有用的方法，如contains（在字符串中搜索）和replace（用另一个字符串替换字符串的部分）。
+
+让我们切换到稍微简单一点的东西：哈希映射！
