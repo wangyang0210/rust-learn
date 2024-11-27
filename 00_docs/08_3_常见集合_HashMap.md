@@ -168,3 +168,28 @@ fn main() {
 
 ## 根据旧值更新值
 
+哈希映射的另一个常见用例是查找键的值，然后根据旧值更新它。例如，下面的代码显示了计算某个文本中每个单词出现次数的代码。我们使用一个哈希映射，以单词作为键，并递增该值来跟踪我们已经见过该单词的次数。如果我们是第一次看到一个单词，我们将首先插入值0。
+
+```rust
+fn main() {
+    use std::collections::HashMap;
+
+    let text = "hello world wonderful world";
+
+    let mut map = HashMap::new();
+
+    for word in text.split_whitespace() {
+        let count = map.entry(word).or_insert(0);
+        *count += 1;
+    }
+
+    println!("{map:?}");
+}
+```
+
+此代码将打印 `{"world": 2, "hello": 1, "wonderful": 1}`。你可能会看到相同的键值对以不同的顺序打印出来，遍历哈希映射是以任意顺序进行的。
+
+`split_whitespace`方法返回一个迭代器，该迭代器按空白字符分隔`text`中的值的子切片。`or_insert`方法返回指定键的值的可变引用（`&mut V`）。在这里，我们将该可变引用存储在`count`变量中，因此为了给该值赋值，我们必须首先使用星号（`*`）对`count`进行解引用。可变引用在for循环结束时超出作用域，因此所有这些更改都是安全的，并且符合借用规则。
+
+## 哈希函数
+
