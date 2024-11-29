@@ -35,3 +35,26 @@ fn main() {
 }
 ```
 
+当您运行该程序时，您将看到如下内容：
+
+```shell
+/Users/wangyang/.cargo/bin/cargo run --color=always --package n09_panic --bin n09_panic --profile dev
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running `target/debug/n09_panic`
+thread 'main' panicked at src/main.rs:2:5:
+crash and burn
+stack backtrace:
+   0: rust_begin_unwind
+             at /rustc/f6e511eec7342f59a25f7c0534f1dbea00d01b14/library/std/src/panicking.rs:662:5
+   1: core::panicking::panic_fmt
+             at /rustc/f6e511eec7342f59a25f7c0534f1dbea00d01b14/library/core/src/panicking.rs:74:14
+   2: n09_panic::main
+             at ./src/main.rs:2:5
+   3: core::ops::function::FnOnce::call_once
+             at /rustc/f6e511eec7342f59a25f7c0534f1dbea00d01b14/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+进程已结束，退出代码为 101
+```
+
+调用 `panic!` 会导致最后两行中包含的错误消息。第一行显示了我们的异常消息和源代码中发生异常的位置：`src/main.rs：2:5` 表示它是 *src/main.rs* 文件的第二行，第五个字符。
