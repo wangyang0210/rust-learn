@@ -1,3 +1,5 @@
+use std::fs::File;
+
 fn main() {
-    println!("Hello, world!");
+    let greeting_file_result = File::open("hello.txt");
 }
