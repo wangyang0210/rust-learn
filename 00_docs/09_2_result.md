@@ -71,3 +71,32 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 ## 匹配不同的错误
 
+ `panic!`不管 `File::open` 失败的原因是什么。但是，我们希望针对不同的失败原因采取不同的操作。如果`File::open` 因为文件不存在而失败，我们想要创建文件并将句柄返回给新文件。如果 `File::open` 因为任何其他原因失败，例如，因为我们没有打开文件的权限，我们仍然希望代码 `panic!`就像在上面代码所做的那样。为此，我们添加了一个内部 `match` 表达式，如下所示：
+
+```rust
+
+use std::fs::File;
+use std::io::ErrorKind;
+
+fn main() {
+    let greeting_file_result = File::open("hello.txt");
+
+    let greeting_file = match greeting_file_result {
+        Ok(file) => file,
+        Err(error) => match error.kind() {
+            ErrorKind::NotFound => match File::create("hello.txt") {
+                Ok(fc) => fc,
+                Err(e) => panic!("Problem creating the file: {e:?}"),
+            },
+            other_error => {
+                panic!("Problem opening the file: {other_error:?}");
+            }
+        },
+    };
+}
+```
+
+`File::open` 在 `Err` 变体中返回的值的类型是`io::Error`，它是标准库提供的结构体。这个结构有一个方法`kind`，我们可以调用它来获取 `io::ErrorKind` 值。枚举`io::ErrorKind` 由标准库提供，它包含了表示可能由I/O操作导致的不同错误类型的成员，我们想要使用的成员是 `ErrorKind::NotFound`，它表示我们尝试打开的文件尚不存在。所以我们在`greeting_file_result` 上匹配，但我们在 `error.kind()` 上也有一个内部匹配。
+
+我们要在内部匹配中检查的条件是 `error.kind()` 返回的值是否是 `ErrorKind` 枚举的 `NotFound` 成员。如果是，我们尝试使用 `File::create` 创建文件。但是，由于 `File::create`也可能失败，因此我们需要在内部 `match` 表达式中使用第二个分支。当无法创建文件时，将打印不同的错误消息。外部`match`第二个分支保持不变，因此程序会因除缺少文件错误之外的任何错误都会抛出异常。
+
