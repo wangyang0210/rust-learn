@@ -55,6 +55,19 @@ fn main() {
 
 `match` 的另一分支处理我们从`File::open` 获取 `Err` 值的情况。在此示例中，我们选择调用 `panic!` 宏。如果当前目录中没有名为 *hello.txt* 的文件，我们运行这段代码，我们将从`panic!`宏看到以下输出：
 
-```
+```shell
+warning: `n09_result` (bin "n09_result") generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.66s
+     Running `target/debug/n09_result`
+thread 'main' panicked at src/main.rs:8:23:
+Problem opening the file: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 ```
+
+像往常一样，这个输出准确地告诉我们出了什么问题。
+
+
+
+## 匹配不同的错误
+
