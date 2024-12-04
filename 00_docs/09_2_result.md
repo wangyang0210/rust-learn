@@ -30,5 +30,31 @@ fn main() {
 }
 ```
 
+`File::open`的返回类型是一个`Result<T, E>`。泛型参数`T`已被`File::open`的实现填充，其类型是一个文件句柄。错误值中使用的`E`的类型是`std::io::Error`。这种返回类型意味着对`File::open`的调用可能会成功，并返回一个我们可以读取或写入的文件句柄。函数调用也可能会失败：例如，文件可能不存在，或者我们可能没有权限访问文件。`File::open`函数需要有一种方法来告诉我们它是成功还是失败，同时给我们提供文件句柄或错误信息。这些信息正是`Result`枚举所传达的。
 
+在 `File::open` 成功的情况下，变量`greeting_file_result` 中的值将是包含文件句柄的 `Ok` 实例。如果失败，`greeting_file_result` 中的值将是中的值将是一个包含有关发生错误类型更多信息的 `Err` 的实例。
 
+为了根据 `File::open` 返回的值执行不同的操作，现在我们来调整下代码。
+
+```rust
+use std::fs::File;
+
+fn main() {
+    let greeting_file_result = File::open("hello.txt");
+
+    let greeting_file = match greeting_file_result {
+        Ok(file) => file,
+        Err(error) => panic!("Problem opening the file: {error:?}"),
+    };
+}
+```
+
+请注意，与 `Option` 枚举一样，`Result` 枚举及其成员已通过预导入引入到作用域中，因此我们不需要在`match`分支中的 `Ok` 和 `Err` 变体之前指定 `Result::`。
+
+当结果为 `Ok` 时，此代码将从 `Ok` 成员中返回内部`file`值，然后将该文件 句柄值分配给变量`greeting_file`。匹配后，我们可以使用文件句柄进行读取或写入。
+
+`match` 的另一分支处理我们从`File::open` 获取 `Err` 值的情况。在此示例中，我们选择调用 `panic!` 宏。如果当前目录中没有名为 *hello.txt* 的文件，我们运行这段代码，我们将从`panic!`宏看到以下输出：
+
+```
+
+```
